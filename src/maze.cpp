@@ -5,6 +5,8 @@
  *      Author: bdosd
  */
 
+#include "API.h"
+
 #include "maze.h"
 
 maze::maze()
@@ -16,21 +18,23 @@ maze::maze()
 
 	for (int ii = 0; ii < WIDTH; ii++)
 	{
-		m_data[ii] = 0xF2;
+		m_data[ii] = 0xF4;
 		m_data[ii + (HEIGHT - 1) * WIDTH] = 0xF1;
 	}
 
 	for (int ii = 0; ii < HEIGHT; ii++)
 	{
-		m_data[ii * WIDTH] = 0xF8;
-		m_data[(ii * WIDTH) + HEIGHT - 1] = 0xF4;
+		m_data[ii * WIDTH] = 0xF2;
+		m_data[(ii * WIDTH) + HEIGHT - 1] = 0xF8;
 	}
 
-	m_data[0] = 0xFA;
-	m_data[WIDTH - 1] = 0xF6;
-	m_data[(HEIGHT - 1) * WIDTH] = 0xF9;
-	m_data[(HEIGHT * WIDTH) - 1] = 0xF5;
+	m_data[0] = 0xF6;
+	m_data[WIDTH - 1] = 0xFC;
+	 m_data[(HEIGHT - 1) * WIDTH] = 0xF3;
+	 m_data[(HEIGHT * WIDTH) - 1] = 0xF9;
 
+	mousePos = 0;
+	mouseDir = 0;
 }
 
 maze::~maze()
@@ -126,3 +130,28 @@ bool maze::isCenter(uint8_t cell)
 		return 1;
 	return 0;
 }
+
+bool maze::scanWall()
+{
+	int tmp;
+
+	if (API::wallFront())
+	{
+		m_data[mousePos] |= 0x11 << mouseDir;
+	}
+
+	if (API::wallLeft())
+	{
+		tmp = 0x2222 << mouseDir;
+		m_data[mousePos] |=(tmp>>8)&0xFF;
+	}
+
+	if (API::wallRight())
+	{
+		tmp = 0x8888 << mouseDir;
+		m_data[mousePos] |=(tmp>>8)&0xFF;
+
+	}
+	return 0;
+}
+

@@ -38,7 +38,7 @@ public:
 	//
 	//    info |  known  |  walls  |
 	//         |---------|---------|
-	//     dir | w e s n | w e s n |
+	//     dir | e s w n | e s w n |
 	//         |---------|---------|
 	//    bits | 7 6 5 4 | 3 2 1 0 |
 	//
@@ -47,6 +47,9 @@ public:
 	//
 	uint8_t m_data[WIDTH * HEIGHT];
 	Info m_dataDijkstra[WIDTH * HEIGHT];
+
+	uint8_t	mousePos;
+	uint8_t	mouseDir;
 
 	void initDijkstra();
 
@@ -58,6 +61,8 @@ public:
 	bool isWall(uint8_t cell, uint8_t direction);
 
 	bool isCenter(uint8_t cell);
+
+	bool scanWall();
 };
 
 #endif /* MAZE_H_ */
